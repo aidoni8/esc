@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Variables
+CLUSTER_NAME="my-cluster"
+REGION="us-east-2"
+VPC_NAME="my-vpc"
+SUBNET1_CIDR="10.0.1.0/24"
+SUBNET2_CIDR="10.0.2.0/24"
+SECURITY_GROUP_NAME="my-security-group"
+
+# Create VPC
+vpc_id=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --region $REGION --output text --query 'Vpc.VpcId')
+aws ec2 create-tags --resources $vpc_id --tags Key=Name,Value=$VPC_NAME --region $REGION
+
+# Create Subnets
+subnet1_id=$(aws ec2 create-subnet --vpc-id $vpc_id --cidr-block $SUBNET1_CIDR --availability-zone $REGIONa --region $REGION --output text --query 'Subnet.SubnetId')
+subnet2_id=$(aws ec2 create-subnet --vpc-id $vpc_id --cidr-block $SUBNET2_CIDR --availability-zone $REGIONb --region $REGION --output text --query 'Subnet.SubnetId')
+
+# Create Security Group
+security_group_id=$(aws ec2 create-security-group --group-name $SECURITY_GROUP_NAME --description "ECS Security Group" --vpc-id $vpc_id --region $REGION --output text --query 'GroupId')
+
+# Authorize Ingress Traffic
+aws ec2 authorize-security-group-ingress --group-id $security_group_id --protocol tcp --port 80 --cidr 0.0.0.0/0 --region $REGION
+
+# Create ECS Cluster
+aws ecs create-cluster --cluster-name $CLUSTER_NAME --capacity-providers FARGATE --region $REGION
