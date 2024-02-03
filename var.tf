@@ -54,3 +54,8 @@ variable "container_memory" {
   type        = number
   default     = "512"
 }
+
+variable "ecs_task_execution_role_name" {
+  type    = string
+  default = "ecsTaskExecutionRole"
+}
