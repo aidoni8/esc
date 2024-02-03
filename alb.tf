@@ -67,4 +67,11 @@ module "alb" {
     Environment = "Development"
     Project     = "ALB"
   }
+
+resource "aws_lb_target_group_attachment" "this" {
+  count           = length(keys(module.alb.target_groups))
+  target_group_arn = aws_lb_target_group.my_target_group.arn
+  target_id       = module.ecs_service.task_ids[count.index]
+}
+
 }
