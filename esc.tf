@@ -41,7 +41,7 @@ resource "aws_ecs_service" "my_service" {
   launch_type     = "FARGATE"
 
   load_balancer {
-    target_group_arn = module.alb.alb_arn
+    target_group_arn = module.alb.arn
     container_name   = "my-app"
     container_port   = 80
   }
