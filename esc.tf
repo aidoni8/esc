@@ -47,8 +47,8 @@ resource "aws_ecs_service" "my_service" {
   }
 
   network_configuration {
-    subnets          = [aws_subnet.private_subnet[0].id] # Specify your public subnets
-    security_groups  = [aws_security_group.ecs_sg.id]    # Specify the security group you created
+    subnets          = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"] # Specify your public subnets
+    security_groups  = [aws_security_group.lb_sg.id]    # Specify the security group you created
     assign_public_ip = true
   }
   depends_on = [aws_lb_listener.my_listener, aws_iam_role_policy_attachment.ecs_task_execution_role]
