@@ -1,1 +1,52 @@
+# Security Group for ELB
+resource "aws_security_group" "elb_sg" {
+  name        = "elb-security-group"
+  description = "Security group for Elastic Load Balancer"
+  vpc_id      = module.vpc.vpc_id
+  
+  # Inbound rule to allow HTTP traffic from anywhere
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  # Inbound rule to allow HTTPS traffic from anywhere
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
+  # Outbound rule allowing all traffic
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Security Group for ECS tasks
+resource "aws_security_group" "ecs_task_sg" {
+  name        = "ecs-task-security-group"
+  description = "Security group for ECS tasks"
+  vpc_id      = aws_vpc.my_vpc.id
+
+  # Inbound rule to allow traffic from ELB
+  ingress {
+    from_port          = 0
+    to_port            = 65535
+    protocol           = "tcp"
+    security_groups    = [aws_security_group.elb_sg.id]
+  }
+
+  # Outbound rule allowing all traffic
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
