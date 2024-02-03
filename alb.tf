@@ -3,7 +3,7 @@ resource "aws_lb" "my_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb_sg.id]                          # Associate the ALB with the security group
-  subnets            = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"] # Specify your public subnets
+  subnets            = module.vpc.public_subnet_ids # Specify your public subnets
 }
 
 resource "aws_lb_target_group" "my_target_group" {
