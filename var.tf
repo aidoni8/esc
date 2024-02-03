@@ -1,87 +1,56 @@
-variable "aws_region" {
-  description = "Add AWS region."
-  default     = "us-east-2"
-  type        = string
-}
-
-
-variable "ecs_iam_role_name" {
-  type        = string
-  description = "Enter a name for the ECS IAM Role"
-  default     = "ecsTaskExecutionRole"
-}
-
-variable "aws_ecs_cluster_name" {
-  type        = string
-  description = "Enter a name for ECS cluster"
-  default     = "demo-ecs-cluster"
-}
-
-variable "aws_ecr_repository" {
-  type        = string
-  description = "ECR repo name"
-  default     = "demo_ecs_app"
-}
-
-variable "aws_ecs_task_def_fam" {
-  type        = string
-  description = "demo_ecs_fam"
-  default     = "demo_ecs_fam"
-}
-
-variable "fargate_cpu" {
-  type        = number
-  description = "enter required number of cpus"
-  default     = 1024
-}
-
-variable "fargate_memory" {
-  type        = number
-  description = "Enter required memory"
-  default     = 2048
-}
-
-variable "aws_ecs_service_name" {
-  type        = string
-  description = "service name"
-  default     = "demo_ecs_svc"
-}
-
-variable "app_port" {
-  type        = number
-  description = "Port number of the application contianer"
-  default     = 80
-}
-
-variable "app_count" {
-  type        = number
-  description = "Number of replicas of the pod"
-  default     = 2
-}
-
-variable "ecs_alb_name" {
-  type        = string
-  description = "ALB Name"
-  default     = "demo-ecs-alb"
-}
-
-variable "health_check_path" {
+variable "region" {
   type    = string
-  default = "/"
+  default = "us-east-2"
 }
 
-variable "aws_sg_name" {
+variable "vpc_cidr" {
+  type    = string
+  default = "10.0.0.0/16"
+}
+
+variable "availability_zones" {
+  type    = list(string)
+  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
+}
+
+variable "public_subnets" {
+  type        = list(string)
+  default     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+  description = "CIDR blocks for public subnets"
+}
+
+variable "private_subnets" {
+  type        = list(string)
+  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  description = "CIDR blocks for private subnets"
+}
+
+variable "cluster_name" {
+  description = "Name of the ECS cluster"
   type        = string
-  description = "security group name"
-  default     = "demo_ecs_sg"
+  default     = "my-ecs-cluster"
 }
 
-variable "tag" {
-  type    = string
-  default = "demo"
+variable "task_family" {
+  description = "Family name of the ECS task definition"
+  type        = string
+  default     = "myapp-task"
 }
 
-variable "ecs_task_execution_role_name" {
-  type    = string
-  default = "ecsTaskExecutionRole"
+variable "container_image" {
+  description = "Docker image for the container"
+  type        = string
+  default     = "islamovna/my-nginx-image:latest"
+}
+
+variable "container_cpu" {
+  description = "CPU units for the container"
+  type        = number
+  default     = "256"
+}
+
+variable "container_memory" {
+  description = "Memory for the container"
+  type        = number
+  default     = "512"
 }
