@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name      = "my-app"
-      image     = aidoni8/dockernew:latest # Replace with your Docker image
+      image     = "aidoni8/dockernew:latest" # Replace with your Docker image
       cpu       = var.container_cpu
       memory    = var.container_memory
       essential = true
