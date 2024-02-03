@@ -41,16 +41,16 @@ resource "aws_ecs_service" "my_service" {
   launch_type     = "FARGATE"
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.my_target_group.arn
+    target_group_arn = module.alb.alb_arn
     container_name   = "my-app"
     container_port   = 80
   }
 
   network_configuration {
-    subnets          = [aws_subnet.private_subnet[0].id] # Specify your public subnets
-    security_groups  = [aws_security_group.ecs_sg.id]    # Specify the security group you created
+    subnets          = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"] # Specify your public subnets
+    security_groups  = [aws_security_group.lb_sg.id]    # Specify the security group you created
     assign_public_ip = true
   }
-  depends_on = [aws_lb_listener.my_listener, aws_iam_role_policy_attachment.ecs_task_execution_role]
+  depends_on = [module.alb.this_http_listener, aws_iam_role_policy_attachment.ecs_task_execution_role]
 }
 
