@@ -34,7 +34,6 @@ resource "aws_security_group" "ecs_task_sg" {
   name        = "ecs-task-security-group"
   description = "Security group for ECS tasks"
   vpc_id      = module.vpc.vpc_id
-}
 
   # Inbound rule to allow traffic from LB
   ingress {
@@ -52,3 +51,4 @@ resource "aws_security_group" "ecs_task_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
