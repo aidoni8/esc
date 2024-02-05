@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "aidoniesc"
-    key    = "path/to/my/key"
+    key    = "terraform.tfstate"
     region = "us-east-2"
   }
 }
