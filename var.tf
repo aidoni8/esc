@@ -40,7 +40,7 @@ variable "task_family" {
 variable "container_image" {
   description = "Docker image for the container"
   type        = string
-  default     = "islamovna/my-nginx-image:latest"
+  default     = "aidoni8/dockernew:latest"
 }
 
 variable "container_cpu" {
