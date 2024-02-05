@@ -2,7 +2,7 @@
 resource "aws_security_group" "lb_sg" {
   name        = "lb-security-group"
   description = "Security group for Elastic Load Balancer"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = aws_vpc.main.id
   
   # Inbound rule to allow HTTP traffic from anywhere
   ingress {
