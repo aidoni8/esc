@@ -3,14 +3,14 @@ resource "aws_lb" "my_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb_sg.id]                          # Associate the ALB with the security group
-  subnets            = module.vpc.public_subnets # Specify your public subnets
+  subnets            = [for subnet in aws_subnet.public_subnet[*] : subnet.id] # Specify your public subnets
 }
 
 resource "aws_lb_target_group" "my_target_group" {
   name        = "my-target-group"
   port        = 80              # Port that your ECS tasks or containers are listening on
   protocol    = "HTTP"          # Protocol used by your ECS tasks or containers
-  vpc_id      = module.vpc.vpc_id # Specify your VPC ID
+  vpc_id      = aws_vpc.main.id # Specify your VPC ID
   target_type = "ip"
   health_check {
     path                = "/"
