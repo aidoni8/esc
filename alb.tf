@@ -10,7 +10,7 @@ resource "aws_lb_target_group" "my_target_group" {
   name        = "my-target-group"
   port        = 80              # Port that your ECS tasks or containers are listening on
   protocol    = "HTTP"          # Protocol used by your ECS tasks or containers
-  vpc_id      = aws_vpc.main.id # Specify your VPC ID
+  vpc_id      = aws_vpc.my_vpc.id # Specify your VPC ID
   target_type = "ip"
   health_check {
     path                = "/"
