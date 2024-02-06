@@ -2,7 +2,7 @@
 resource "aws_security_group" "lb_sg" {
   name        = "lb-security-group"
   description = "Security group for Elastic Load Balancer"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.my_vpc.id
   
   # Inbound rule to allow HTTP traffic from anywhere
   ingress {
@@ -33,7 +33,7 @@ resource "aws_security_group" "lb_sg" {
 resource "aws_security_group" "ecs_task_sg" {
   name        = "ecs-task-security-group"
   description = "Security group for ECS tasks"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.my_vpc.id
 
   # Inbound rule to allow traffic from LB
   ingress {
