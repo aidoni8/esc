@@ -1,26 +1,29 @@
-# Security Group for LB
-resource "aws_security_group" "lb_sg" {
-  name        = "lb-security-group"
-  description = "Security group for Elastic Load Balancer"
-  vpc_id      = aws_vpc.my_vpc.id
-  
-  # Inbound rule to allow HTTP traffic from anywhere
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  
-  # Inbound rule to allow HTTPS traffic from anywhere
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+# Define Security Group
+resource "aws_security_group" "ecs_sg" {
+  name        = "ecs-sg"
+  description = "Security group for ECS service"
+  vpc_id      = aws_vpc.main.id # Specify your VPC ID
+
+  tags = {
+    Name = "project-ecs-sg"
   }
 
-  # Outbound rule allowing all traffic
+  # Inbound rules
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+
+  ingress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+
+  # Outbound rules
   egress {
     from_port   = 0
     to_port     = 0
@@ -29,26 +32,33 @@ resource "aws_security_group" "lb_sg" {
   }
 }
 
-# Security Group for ECS tasks
-resource "aws_security_group" "ecs_task_sg" {
-  name        = "ecs-task-security-group"
-  description = "Security group for ECS tasks"
-  vpc_id      = aws_vpc.my_vpc.id
+resource "aws_security_group" "alb_sg" {
+  name        = "alb-sg"
+  description = "Security group for Application Load Balancer"
 
-  # Inbound rule to allow traffic from LB
+  vpc_id = aws_vpc.main.id # Specify your VPC ID
+
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    security_groups    = [aws_security_group.lb_sg.id]
+    cidr_blocks = ["0.0.0.0/0"] # Allow traffic from anywhere
   }
 
-  # Outbound rule allowing all traffic
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allow traffic from anywhere
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] # Allow outbound traffic to anywhere
+  }
+  tags = {
+    Name = "project-alb-sg"
   }
 }
